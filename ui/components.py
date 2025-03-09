@@ -40,8 +40,9 @@ def render_file_upload_section():
                 st.write("**Text extracted from document:**")
                 st.write(st.session_state.document_text)
 
+# Modify query_section in ui/components.py
 def render_query_section(combined_text):
-    """Render the query section"""
+    """Render the query section with chat functionality"""
     st.subheader(translate("questions_header"))
     
     # Subject selection
@@ -53,10 +54,49 @@ def render_query_section(combined_text):
     # Learning style preference
     selected_style = st.selectbox("Preferred Learning Style", LEARNING_STYLES)
     
+    # Chat title input for current chat
+    current_chat_id = st.session_state.current_chat_id
+    if current_chat_id not in st.session_state.chat_titles:
+        st.session_state.chat_titles[current_chat_id] = translate("new_chat_default")
+    
+    # Allow user to change chat title
+    chat_title = st.text_input(
+        translate("chat_title"), 
+        value=st.session_state.chat_titles[current_chat_id],
+        key=f"title_{current_chat_id}"
+    )
+    st.session_state.chat_titles[current_chat_id] = chat_title
+    
+    # Initialize chat history for this chat if it doesn't exist
+    if current_chat_id not in st.session_state.chat_history:
+        st.session_state.chat_history[current_chat_id] = []
+    
+    # Display chat history for current chat
+    chat_container = st.container()
+    with chat_container:
+        for msg in st.session_state.chat_history[current_chat_id]:
+            if msg["role"] == "user":
+                st.markdown(f"**You:** {msg['content']}")
+            else:
+                st.markdown(f"**Tutor:** {msg['content']}")
+    
     # User query
     user_query = st.text_area(translate("question_input"), height=100)
     
     if st.button(translate("ask_button")) and user_query:
+        # Save user message to chat history
+        st.session_state.chat_history[current_chat_id].append({
+            "role": "user", 
+            "content": user_query
+        })
+        
+        # Get context from previous exchanges
+        chat_context = ""
+        if len(st.session_state.chat_history[current_chat_id]) > 1:
+            # Extract last few exchanges for context
+            last_exchanges = st.session_state.chat_history[current_chat_id][-4:] if len(st.session_state.chat_history[current_chat_id]) > 4 else st.session_state.chat_history[current_chat_id]
+            chat_context = "\n".join([f"{'User' if msg['role'] == 'user' else 'Tutor'}: {msg['content']}" for msg in last_exchanges[:-1]])
+        
         # Display combined input for reference
         if combined_text:
             st.write(translate("combined_input"))
@@ -73,7 +113,15 @@ def render_query_section(combined_text):
                     selected_subject, 
                     selected_grade, 
                     selected_style,
-                    lang_code
+                    lang_code,
+                    chat_context  # Pass chat context for follow-up questions
                 )
-                st.markdown("### Response:")
-                st.markdown(response)
+                
+                # Add response to chat history
+                st.session_state.chat_history[current_chat_id].append({
+                    "role": "assistant", 
+                    "content": response
+                })
+                
+                # Refresh the page to show updated chat
+                st.rerun()

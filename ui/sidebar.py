@@ -1,13 +1,36 @@
+# Modify ui/sidebar.py
 import streamlit as st
 from datetime import datetime
 
 from config import AVAILABLE_MODELS, MODEL_NAME
-from utils.translations import LANGUAGES
+from utils.translations import LANGUAGES, translate
 from utils.api import validate_api_key
 from utils.cache import clear_cache
 
 def render_sidebar():
     """Render the sidebar with all its components"""
+    # Chat History Section
+    st.sidebar.header(translate("chat_history"))
+    
+    # New Chat Button
+    if st.sidebar.button(translate("new_chat")):
+        # Generate a new chat ID
+        st.session_state.current_chat_id = datetime.now().strftime("%Y%m%d%H%M%S")
+        # Reset the current chat messages
+        st.session_state.chat_history[st.session_state.current_chat_id] = []
+        # Set default title
+        st.session_state.chat_titles[st.session_state.current_chat_id] = translate("new_chat_default")
+    
+    # Display saved chats
+    if st.session_state.chat_titles:
+        st.sidebar.subheader(translate("saved_chats"))
+        for chat_id, title in st.session_state.chat_titles.items():
+            if st.sidebar.button(f"{title}", key=f"chat_{chat_id}"):
+                st.session_state.current_chat_id = chat_id
+    
+    st.sidebar.markdown("---")
+    
+    # Original sidebar content
     st.sidebar.header("API Configuration")
     
     # API Key input
@@ -25,18 +48,6 @@ def render_sidebar():
     # Cache management
     if st.sidebar.button("Clear Analysis Cache"):
         clear_cache()
-    
-    # API test button
-    #if st.sidebar.button("Test API Connection"):
-    #    validate_api_key()
-    
-    # Usage tracking
-    #st.sidebar.markdown("### API Usage Tracker")
-    #today = datetime.now().strftime("%Y-%m-%d")
-    #usage_key = f"usage_count_{today}"
-    #if usage_key not in st.session_state:
-    #    st.session_state[usage_key] = 0
-    #st.sidebar.text(f"Requests today: {st.session_state[usage_key]}")
     
     # Model selection
     st.sidebar.markdown("### Model Settings")
@@ -57,6 +68,7 @@ def render_sidebar():
     3. Support for multiple subjects and education levels
     4. Multi-language support for diverse learners
     5. Response caching to minimize API calls
+    6. Chat history for follow-up questions
 
     This application is for educational assistance only.
     """)
