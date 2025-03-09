@@ -5,6 +5,7 @@ from PIL import Image
 import PyPDF2
 #import docx
 import easyocr
+from utils.pdfReader import read_pdf  # Import the read_pdf function
 
 # Initialize OCR reader (globally to avoid reinitialization)
 @st.cache_resource
@@ -29,13 +30,20 @@ def extract_text_from_image(image):
         return f"Error extracting text from image: {str(e)}"
 
 def extract_text_from_pdf(pdf_file):
-    """Extract text from PDF document"""
+    """Extract text from PDF document using the improved pdfReader function"""
     try:
-        pdf_reader = PyPDF2.PdfReader(pdf_file)
-        text = ""
-        for page_num in range(len(pdf_reader.pages)):
-            text += pdf_reader.pages[page_num].extract_text()
-        return text
+        # Create a temporary file to use with read_pdf function
+        with open("temp_pdf.pdf", "wb") as f:
+            f.write(pdf_file.getvalue())
+        
+        # Use the read_pdf function from pdfReader.py
+        extracted_text = read_pdf("temp_pdf.pdf")
+        
+        # Clean up the temporary file
+        import os
+        os.remove("temp_pdf.pdf")
+        
+        return extracted_text
     except Exception as e:
         return f"Error extracting text from PDF: {str(e)}"
 
