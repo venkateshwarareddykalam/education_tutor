@@ -12,7 +12,7 @@ def render_sidebar():
     
     # API Key input
     groq_api_key = "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"
-    
+    st.session_state["groq_api_key"] = groq_api_key
     # Language settings
     st.sidebar.header("Language Settings")
     selected_language = st.sidebar.selectbox(
