@@ -15,17 +15,21 @@ def render_sidebar():
     # New Chat Button
     if st.sidebar.button(translate("new_chat")):
         # Generate a new chat ID
-        st.session_state.current_chat_id = datetime.now().strftime("%Y%m%d%H%M%S")
+        new_chat_id = datetime.now().strftime("%Y%m%d%H%M%S")
         # Reset the current chat messages
-        st.session_state.chat_history[st.session_state.current_chat_id] = []
+        st.session_state.chat_history[new_chat_id] = []
         # Set default title
-        st.session_state.chat_titles[st.session_state.current_chat_id] = translate("new_chat_default")
+        st.session_state.chat_titles[new_chat_id] = translate("new_chat_default")
+        # Update current chat ID
+        st.session_state.current_chat_id = new_chat_id
     
     # Display saved chats
     if st.session_state.chat_titles:
         st.sidebar.subheader(translate("saved_chats"))
         for chat_id, title in st.session_state.chat_titles.items():
-            if st.sidebar.button(f"{title}", key=f"chat_{chat_id}"):
+            # Use the actual stored title instead of the default
+            display_title = title if title != "" else translate("new_chat_default")
+            if st.sidebar.button(f"{display_title}", key=f"chat_{chat_id}"):
                 st.session_state.current_chat_id = chat_id
     
     st.sidebar.markdown("---")

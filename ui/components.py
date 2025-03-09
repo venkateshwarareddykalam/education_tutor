@@ -40,7 +40,6 @@ def render_file_upload_section():
                 st.write("**Text extracted from document:**")
                 st.write(st.session_state.document_text)
 
-# Modify query_section in ui/components.py
 def render_query_section(combined_text):
     """Render the query section with chat functionality"""
     st.subheader(translate("questions_header"))
@@ -71,14 +70,26 @@ def render_query_section(combined_text):
     if current_chat_id not in st.session_state.chat_history:
         st.session_state.chat_history[current_chat_id] = []
     
-    # Display chat history for current chat
+    # Display chat history for current chat with improved styling
     chat_container = st.container()
     with chat_container:
-        for msg in st.session_state.chat_history[current_chat_id]:
-            if msg["role"] == "user":
-                st.markdown(f"**You:** {msg['content']}")
-            else:
-                st.markdown(f"**Tutor:** {msg['content']}")
+        if st.session_state.chat_history[current_chat_id]:
+            st.markdown("### Chat Conversation")
+            for msg in st.session_state.chat_history[current_chat_id]:
+                if msg["role"] == "user":
+                    st.markdown(
+                        f"""<div style="background-color: #070708; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+                        <strong>You:</strong> {msg['content']}
+                        </div>""", 
+                        unsafe_allow_html=True
+                    )
+                else:
+                    st.markdown(
+                        f"""<div style="background-color: #1a5950; padding: 10px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #039be5;">
+                        <strong>Tutor:</strong> {msg['content']}
+                        </div>""", 
+                        unsafe_allow_html=True
+                    )
     
     # User query
     user_query = st.text_area(translate("question_input"), height=100)
