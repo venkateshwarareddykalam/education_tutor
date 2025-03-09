@@ -29,20 +29,10 @@ def setup_session_state():
     
     if "document_text" not in st.session_state:
         st.session_state.document_text = ""
-        
-    # Usage tracking
-    today = datetime.now().strftime("%Y-%m-%d")
-    usage_key = f"usage_count_{today}"
-    if usage_key not in st.session_state:
-        st.session_state[usage_key] = 0
-# Add to config.py
-def setup_session_state():
-    """Initialize session state variables"""
-    if "image_text" not in st.session_state:
-        st.session_state.image_text = ""
     
-    if "document_text" not in st.session_state:
-        st.session_state.document_text = ""
+    # Add toggle state for image caption
+    if "use_image_caption" not in st.session_state:
+        st.session_state.use_image_caption = True
     
     # Chat history
     if "chat_history" not in st.session_state:

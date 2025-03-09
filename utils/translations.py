@@ -38,7 +38,12 @@ TRANSLATIONS = {
     "new_chat": "New Chat",
     "saved_chats": "Previous Chats",
     "new_chat_default": "New Conversation",
-    "chat_title": "Chat Title"
+    "chat_title": "Chat Title",
+     "caption_toggle": "Generate image caption",
+            "caption_help": "Enable/disable automatic image captioning",
+            "caption_generating": "Generating image caption...",
+            "caption_success": "Generated caption:",
+            "caption_error": "Error generating caption:"
 },
 
 # Add these entries to the "hi" dictionary
@@ -61,7 +66,13 @@ TRANSLATIONS = {
     "new_chat": "नई चैट",
     "saved_chats": "पिछली चैट",
     "new_chat_default": "नई बातचीत",
-    "chat_title": "चैट शीर्षक"
+    "chat_title": "चैट शीर्षक",
+    "caption_toggle": "छवि कैप्शन जनरेट करें",
+            "caption_help": "स्वचालित छवि कैप्शनिंग सक्षम/अक्षम करें",
+            "caption_generating": "छवि कैप्शन जनरेट कर रहा है...",
+            "caption_success": "जनरेट किया गया कैप्शन:",
+            "caption_error": "कैप्शन जनरेट करने में त्रुटि:"
+    
 },
     # Add other language translations as needed
 }

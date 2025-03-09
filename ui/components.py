@@ -5,12 +5,16 @@ from config import SUBJECTS, GRADE_LEVELS, LEARNING_STYLES
 from utils.translations import translate, lang_code
 from utils.text_extraction import extract_text_from_image, extract_text_from_pdf, extract_text_from_docx
 from utils.api import get_educational_response
+from utils.imgDis import get_image_info
 
 def render_file_upload_section():
     """Render the file upload section"""
     col1, col2 = st.columns(2)
     
     with col1:
+        # Add caption toggle option
+        use_caption = st.checkbox("Generate image caption", value=True, help="Enable/disable automatic image captioning")
+        
         uploaded_image = st.file_uploader(
             translate("upload_img_button"), 
             type=["jpg", "png", "jpeg"]
@@ -20,7 +24,24 @@ def render_file_upload_section():
             image = Image.open(uploaded_image)
             st.image(image, caption="Uploaded Image", use_column_width=True)
             with st.spinner("Extracting text from image..."):
-                st.session_state.image_text = extract_text_from_image(image)
+                # Extract text with OCR
+                extracted_text = extract_text_from_image(image)
+                
+                # If caption is enabled, get image description
+                if use_caption:
+                    with st.spinner("Generating image caption..."):
+                        try:
+                            image_caption = get_image_info(image)
+                            st.success(f"Generated caption: {image_caption}")
+                            # Combine OCR text with caption
+                            st.session_state.image_text = f"Image Caption: {image_caption}\n\nExtracted Text: {extracted_text}"
+                        except Exception as e:
+                            st.error(f"Error generating caption: {str(e)}")
+                            st.session_state.image_text = extracted_text
+                else:
+                    # Skip caption generation
+                    st.session_state.image_text = extracted_text
+                
                 st.write("**Text extracted from image:**")
                 st.write(st.session_state.image_text)
     
