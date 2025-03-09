@@ -11,11 +11,7 @@ def render_sidebar():
     st.sidebar.header("API Configuration")
     
     # API Key input
-    groq_api_key = st.sidebar.text_input(
-        "Enter Groq API Key:", 
-        type="password",
-        key="groq_api_key"
-    )
+    groq_api_key = "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"
     
     # Language settings
     st.sidebar.header("Language Settings")
@@ -31,21 +27,21 @@ def render_sidebar():
         clear_cache()
     
     # API test button
-    if st.sidebar.button("Test API Connection"):
-        validate_api_key()
+    #if st.sidebar.button("Test API Connection"):
+    #    validate_api_key()
     
     # Usage tracking
-    st.sidebar.markdown("### API Usage Tracker")
-    today = datetime.now().strftime("%Y-%m-%d")
-    usage_key = f"usage_count_{today}"
-    if usage_key not in st.session_state:
-        st.session_state[usage_key] = 0
-    st.sidebar.text(f"Requests today: {st.session_state[usage_key]}")
+    #st.sidebar.markdown("### API Usage Tracker")
+    #today = datetime.now().strftime("%Y-%m-%d")
+    #usage_key = f"usage_count_{today}"
+    #if usage_key not in st.session_state:
+    #    st.session_state[usage_key] = 0
+    #st.sidebar.text(f"Requests today: {st.session_state[usage_key]}")
     
     # Model selection
     st.sidebar.markdown("### Model Settings")
     model_option = st.sidebar.selectbox(
-        "Select Groq Model",
+        "Select LLM Model",
         AVAILABLE_MODELS,
         index=0,
         key="model_name"

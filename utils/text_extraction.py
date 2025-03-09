@@ -40,12 +40,4 @@ def extract_text_from_pdf(pdf_file):
         return f"Error extracting text from PDF: {str(e)}"
 
 def extract_text_from_docx(docx_file):
-    """Extract text from DOCX document"""
-    try:
-        doc = docx.Document(docx_file)
-        text = ""
-        for para in doc.paragraphs:
-            text += para.text + "\n"
-        return text
-    except Exception as e:
-        return f"Error extracting text from DOCX: {str(e)}"
+    return "no data indoc "
