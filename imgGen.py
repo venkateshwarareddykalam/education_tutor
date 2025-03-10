@@ -1,9 +1,10 @@
 from huggingface_hub import InferenceClient
 from IPython.display import display
-
+from dotenv import load_dotenv
+import os
 client = InferenceClient(
     provider="hf-inference",
-    api_key="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"
+    api_key= os.getenv("HUGGING_FACE_URL")
 )
 def Genarate_img(prompt):
     try:

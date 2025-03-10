@@ -6,6 +6,10 @@ from config import AVAILABLE_MODELS, MODEL_NAME
 from utils.translations import LANGUAGES, translate
 from utils.api import validate_api_key
 from utils.cache import clear_cache
+from dotenv import load_dotenv
+import os
+#from dotenv import load_env
+load_dotenv()
 
 def render_sidebar():
     """Render the sidebar with all its components"""
@@ -38,7 +42,7 @@ def render_sidebar():
     st.sidebar.header("API Configuration")
     
     # API Key input
-    groq_api_key = "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"
+    groq_api_key = os.getenv("GROQ_URL")
     st.session_state["groq_api_key"] = groq_api_key
     # Language settings
     st.sidebar.header("Language Settings")
