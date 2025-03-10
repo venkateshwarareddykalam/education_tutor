@@ -28,7 +28,7 @@ def render_sidebar():
         st.sidebar.subheader(translate("saved_chats"))
         for chat_id, title in st.session_state.chat_titles.items():
             # Use the actual stored title instead of the default
-            display_title = title if title != "" else translate("new_chat_default")
+            display_title = title if title != "" else "Unnamed Convo"
             if st.sidebar.button(f"{display_title}", key=f"chat_{chat_id}"):
                 st.session_state.current_chat_id = chat_id
     

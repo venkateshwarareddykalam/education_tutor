@@ -12,29 +12,29 @@ def render_file_upload_section():
     col1, col2 = st.columns(2)
     
     with col1:
-        # Add caption toggle option
-        use_caption = st.checkbox("Generate image caption", value=True, help="Enable/disable automatic image captioning")
+        
         
         uploaded_image = st.file_uploader(
             translate("upload_img_button"), 
             type=["jpg", "png", "jpeg"]
         )
-        
+        # Add caption toggle option
+        use_caption = st.checkbox("Image Have Other than text info ", value=True, help="Enabling this will tell our system that there is data other than text Ex:- Diagram,objects..etc")
         if uploaded_image is not None:
             image = Image.open(uploaded_image)
             st.image(image, caption="Uploaded Image", use_column_width=True)
-            with st.spinner("Extracting text from image..."):
+            with st.spinner("Extracting data from image..."):
                 # Extract text with OCR
                 extracted_text = extract_text_from_image(image)
                 
                 # If caption is enabled, get image description
                 if use_caption:
-                    with st.spinner("Generating image caption..."):
+                    with st.spinner("Extracting Intel info from image"):
                         try:
                             image_caption = get_image_info(image)
-                            st.success(f"Generated caption: {image_caption}")
+                            #st.success(f"Generated caption: {image_caption}")
                             # Combine OCR text with caption
-                            st.session_state.image_text = f"Image Caption: {image_caption}\n\nExtracted Text: {extracted_text}"
+                            st.session_state.image_text = f"Image Info: {image_caption}\n\nExtracted Text: {extracted_text}"
                         except Exception as e:
                             st.error(f"Error generating caption: {str(e)}")
                             st.session_state.image_text = extracted_text
@@ -42,8 +42,8 @@ def render_file_upload_section():
                     # Skip caption generation
                     st.session_state.image_text = extracted_text
                 
-                st.write("**Text extracted from image:**")
-                st.write(st.session_state.image_text)
+                #st.write("**Text extracted from image:**")
+                #st.write(st.session_state.image_text)
     
     with col2:
         uploaded_document = st.file_uploader(
@@ -58,8 +58,8 @@ def render_file_upload_section():
                 elif uploaded_document.name.endswith('.docx'):
                     st.session_state.document_text = extract_text_from_docx(uploaded_document)
                 
-                st.write("**Text extracted from document:**")
-                st.write(st.session_state.document_text)
+                #st.write("**Text extracted from document:**")
+                #st.write(st.session_state.document_text)
 
 def render_query_section(combined_text):
     """Render the query section with chat functionality"""
