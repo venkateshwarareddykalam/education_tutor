@@ -12,7 +12,7 @@ from ui.sidebar import render_sidebar
 from ui.components import render_file_upload_section, render_query_section
 
 # Import new modules
-from calendar import render_calendar_page, render_gamification_dashboard, update_streak
+from utils.calender import render_calendar_page, render_gamification_dashboard, update_streak
 
 def main():
     """Main application entry point"""
