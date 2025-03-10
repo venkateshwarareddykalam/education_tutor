@@ -49,3 +49,27 @@ def setup_session_state():
     usage_key = f"usage_count_{today}"
     if usage_key not in st.session_state:
         st.session_state[usage_key] = 0
+    
+    # User identification
+    if "user_id" not in st.session_state:
+        st.session_state.user_id = "default_user"  # In a real app, you'd use authentication
+    
+    # Streak tracking
+    if "last_active_date" not in st.session_state:
+        st.session_state.last_active_date = None
+    if "current_streak" not in st.session_state:
+        st.session_state.current_streak = 0
+    if "longest_streak" not in st.session_state:
+        st.session_state.longest_streak = 0
+    
+    # Gamification
+    if "points" not in st.session_state:
+        st.session_state.points = 0
+    if "level" not in st.session_state:
+        st.session_state.level = 1
+    if "achievements" not in st.session_state:
+        st.session_state.achievements = []
+    
+    # Active page tracking
+    if "active_page" not in st.session_state:
+        st.session_state.active_page = "main"  # Options: main, calendar, gamification

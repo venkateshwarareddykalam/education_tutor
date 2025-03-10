@@ -1,4 +1,3 @@
-# Modify ui/sidebar.py
 import streamlit as st
 from datetime import datetime
 
@@ -8,11 +7,39 @@ from utils.api import validate_api_key
 from utils.cache import clear_cache
 from dotenv import load_dotenv
 import os
-#from dotenv import load_env
+
 load_dotenv()
 
 def render_sidebar():
     """Render the sidebar with all its components"""
+    # Navigation menu
+    st.sidebar.title("Navigation")
+    
+    # Navigation buttons
+    main_nav = st.sidebar.button("📚 Main Tutor", use_container_width=True)
+    calendar_nav = st.sidebar.button("📅 Learning Calendar", use_container_width=True)
+    gamification_nav = st.sidebar.button("🏆 Progress & Achievements", use_container_width=True)
+    
+    # Handle navigation
+    if main_nav:
+        st.session_state.active_page = "main"
+    if calendar_nav:
+        st.session_state.active_page = "calendar"
+    if gamification_nav:
+        st.session_state.active_page = "gamification"
+    
+    st.sidebar.markdown("---")
+    
+    # Display streak and points
+    st.sidebar.subheader("Your Progress")
+    col1, col2 = st.sidebar.columns(2)
+    with col1:
+        st.metric("🔥 Streak", st.session_state.get("current_streak", 0))
+    with col2:
+        st.metric("⭐ Points", st.session_state.get("points", 0))
+    
+    st.sidebar.markdown("---")
+    
     # Chat History Section
     st.sidebar.header(translate("chat_history"))
     
@@ -49,34 +76,4 @@ def render_sidebar():
     selected_language = st.sidebar.selectbox(
         "Select Language", 
         options=list(LANGUAGES.keys()),
-        index=0,
-        key="selected_language"
-    )
-    
-    # Cache management
-    if st.sidebar.button("Clear Analysis Cache"):
-        clear_cache()
-    
-    # Model selection
-    st.sidebar.markdown("### Model Settings")
-    model_option = st.sidebar.selectbox(
-        "Select LLM Model",
-        AVAILABLE_MODELS,
-        index=0,
-        key="model_name"
-    )
-    
-    # About section
-    st.sidebar.markdown("---")
-    st.sidebar.markdown("### About This App")
-    st.sidebar.markdown("""
-    This education tutor app provides:
-    1. Analysis of educational content and study materials
-    2. AI-powered explanations tailored to your learning style
-    3. Support for multiple subjects and education levels
-    4. Multi-language support for diverse learners
-    5. Response caching to minimize API calls
-    6. Chat history for follow-up questions
-
-    This application is for educational assistance only.
-    """)
+        index=
